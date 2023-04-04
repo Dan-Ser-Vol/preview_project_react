@@ -1,35 +1,51 @@
-import {useForm} from "react-hook-form";
-import {savePost} from "./service/allService.";
+import {Link, Route, Routes} from "react-router-dom";
+import Home from "./pages/Home";
+import Layout from "./pages/Layout";
+import About from "./pages/About";
+import Posts from "./pages/Posts";
+import Comments from "./pages/Comments";
+import Users from "./components/Users";
+import UserDetail from "./components/UserDetail";
+import React from "react";
+import PostDetail from "./components/PostDetail";
 
 function App() {
-  //
-  // let [formValue, setFormValue] = useState({login:'', password:''})
-
-
-  const onsubmit = (post) => {
-  savePost(post).then(({data}) => console.log(data));
-  }
-
-  const {register, handleSubmit} = useForm()
 
   return (
       <div>
-        <h1>APP COMPONENT</h1>
-        <form onSubmit={handleSubmit(onsubmit)}>
-          <input{...register('title', {required: true})} /> <br/>
-          <input {...register('body')}/>
-          <select {...register('userId')}>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          <button>submit</button>
-        </form>
+        <h2>MENU</h2>
+        <ul>
+          <Link to={'/'}>
+            <li>HOME</li>
+          </Link>
+          <Link to={'/layout'}>
+            <li>LAYOUT</li>
+          </Link>
+          <Link to={'/about'}>
+            <li>ABOUT</li>
+          </Link>
+        </ul>
+        <h2>CONTENT</h2>
+        <Routes>
+          <Route index element={<Home/>}/>
 
+          <Route path={'/layout'} element={<Layout/>}>
+
+            <Route path={'users'} element={<Users/>}>
+              <Route path={':id'} element={<UserDetail/>}/>
+            </Route>
+
+            <Route path={'posts'} element={<Posts/>}>
+              <Route path={':id'} element={<PostDetail/>}/>
+            </Route>
+
+            <Route path={'comments'} element={<Comments/>}/>
+          </Route>
+
+          <Route path={'/about'} element={<About/>}/>
+        </Routes>
       </div>
-  );
+  )
 }
 
 export default App;
